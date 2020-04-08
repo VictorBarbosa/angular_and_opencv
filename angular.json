@@ -25,13 +25,15 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/assets/haar/haarcascade_frontalface_default.xml"
             ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [
-              "src/assets/opencv.js"
+              "src/assets/opencv.js",
+              "src/assets/js/utils.js"
             ]
           },
           "configurations": {
@@ -123,8 +125,17 @@
               "devServerTarget": "angular-opencv:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@netlify-builder/deploy:deploy",
+          "options": {
+            "outputPath": "dist/angular-opencv",
+            "netlifyToken": "cb6d096ea3790bc154f2d22e32a66eff11dc6408ceb6796f0c2807a0eba31b41",
+            "siteId": "87e13a1c-b67c-44c6-9063-5251daca001c"
+          }
         }
       }
-    }},
+    }
+  },
   "defaultProject": "angular-opencv"
 }
