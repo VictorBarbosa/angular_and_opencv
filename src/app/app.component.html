@@ -1,12 +1,5 @@
-<div class="container-video">
-  <div>
-    <video style="display: none;" #vid autoplay> </video>
-    <canvas #canvasOutPut width="250" height="250"></canvas>
-  </div>
-  <div>
-    <button (click)="DetectFace()">Detect face</button>
-  </div>
-</div>
 
-<app-bottom-bar></app-bottom-bar>
+<app-video [stream]="stream"></app-video>
+<app-bottom-bar 
+                (stream)="passStream($event)"  ></app-bottom-bar>
 <router-outlet></router-outlet>
