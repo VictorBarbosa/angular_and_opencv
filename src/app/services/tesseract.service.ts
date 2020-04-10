@@ -17,7 +17,7 @@ export class TesseractService {
 
 
   constructor() {
-   ;
+    ;
     this.worker = createWorker();
 
     // Called as early as possible
@@ -34,6 +34,8 @@ export class TesseractService {
     return new Observable(x => {
       // tslint:disable-next-line: no-unused-expression
       // tslint:disable-next-line: no-shadowed-variable
+
+      
       (async (image) => {
         const { data: { text } } = await this.worker.recognize(image);
         x.next(text);

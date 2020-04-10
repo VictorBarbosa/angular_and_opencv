@@ -1,0 +1,8 @@
+<div>
+    <video  style="display: none;"   #hiddenVideo  autoplay> </video>
+    <textarea [(ngModel)]="msg"  readonly cols="30" rows="10"></textarea>
+    <canvas #canvasOutPut width="250" height="250"></canvas>
+    <div>
+        <button (click)="takePicture()">Detect Text</button>
+    </div>
+</div>

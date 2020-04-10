@@ -1,5 +1,6 @@
-
-<app-video [stream]="stream"></app-video>
-<app-bottom-bar 
-                (stream)="passStream($event)"  ></app-bottom-bar>
-<router-outlet></router-outlet>
+<div class="container-video">
+    <div>
+        <router-outlet></router-outlet>
+    </div>
+</div>
+<app-bottom-bar></app-bottom-bar>

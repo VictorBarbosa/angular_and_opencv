@@ -7,20 +7,27 @@ declare const Utils;
   providedIn: 'root'
 })
 export class OpencvServiceService {
-  constructor() { }
 
-  public startVideo(video?: boolean, audio?: boolean, peerIdentity?: string): Observable<MediaStream> {
-    return new Observable(x => {
-      navigator.mediaDevices.getUserMedia({ audio, video, peerIdentity }).then((stream: MediaStream) => {
-        x.next(stream);
-      });
+  private _videoMediaStream: MediaStream;
+  public get videoMediaStream(): MediaStream {
+    return this._videoMediaStream;
+  }
+  public set videoMediaStream(v: MediaStream) {
+    this._videoMediaStream = v;
+  }
+
+  constructor() { }
+  public startVideo(video?: boolean, audio?: boolean, peerIdentity?: string) {
+    navigator.mediaDevices.getUserMedia({ audio, video, peerIdentity }).then((stream: MediaStream) => {
+      this.videoMediaStream = stream;
     });
   }
+
+
 
   detectFace(video: HTMLVideoElement, canvasOutput: HTMLCanvasElement) {
     video.width = 250;
     video.height = 250;
-
     const src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
     const dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
     const gray = new cv.Mat();
@@ -37,7 +44,7 @@ export class OpencvServiceService {
       classifier.load(faceCascadePath); // in the callback, load the cascade from file
 
 
-      // const FPS = 240;
+      const FPS = 60;
       function processVideo() {
         try {
           const begin = Date.now();
@@ -57,18 +64,39 @@ export class OpencvServiceService {
           }
           cv.imshow(canvasOutput, dst);
           // schedule the next one.
-          // let delay = 1000 / FPS - (Date.now() - begin);
+          let delay = 1000 / FPS - (Date.now() - begin);
           setTimeout(processVideo, 0);
-        } catch (err) {
-         ;
-          //  utils.printError(err);
-        }
+        } catch (err) { }
       }
 
       // schedule the first one.
       setTimeout(processVideo, 0);
     });
 
+  }
+  grayVideo(video: HTMLVideoElement, canvasOutput: HTMLCanvasElement) {
+    video.width = 250;
+    video.height = 250;
+    const src = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+    const dst = new cv.Mat(video.height, video.width, cv.CV_8UC4);
+    const gray = new cv.Mat();
+    const cap = new cv.VideoCapture(video);
+    function processVideo() {
+      try {
+
+        // start processing.
+        cap.read(src);
+        src.copyTo(dst);
+        cv.cvtColor(dst, gray, cv.COLOR_RGBA2GRAY, 0);
+        // detect faces.
+        cv.imshow(canvasOutput, gray);
+
+
+        setTimeout(processVideo, 0);
+      } catch (err) { }
+    }
+    // schedule the first one.
+    setTimeout(processVideo, 0);
   }
 
 }
